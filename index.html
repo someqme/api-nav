@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公益站导航 · API 福利站</title>
+<style>
+  :root{
+    --bg:#F4F7FA;
+    --card:#FFFFFF;
+    --border:#E2E8F0;
+    --text:#333333;
+    --muted:#64748B;
+    --accent:#2563EB;
+    --accent-weak:rgba(37,99,235,.07);
+    --accent-line:rgba(37,99,235,.22);
+    --good:#16A34A;
+    --good-weak:rgba(22,163,74,.10);
+    --good-line:rgba(22,163,74,.35);
+    --bad:#DC2626;
+    --bad-weak:rgba(220,38,38,.07);
+    --bad-line:rgba(220,38,38,.3);
+    --shadow:0 1px 2px rgba(15,23,42,.05);
+    --shadow-hover:0 12px 28px rgba(37,99,235,.13),0 6px 12px rgba(15,23,42,.06);
+    --surface-2:#F1F5F9;
+    --chip:#F8FAFC;
+    --glass:rgba(255,255,255,.85);
+    --tip-text:#334155;
+    --num:rgba(37,99,235,.06);
+  }
+  /* 夜间深色模式：跟随系统 */
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F172A;
+      --card:#1E293B;
+      --border:#334155;
+      --text:#E2E8F0;
+      --muted:#94A3B8;
+      --accent:#60A5FA;
+      --accent-weak:rgba(96,165,250,.12);
+      --accent-line:rgba(96,165,250,.3);
+      --good:#4ADE80;
+      --good-weak:rgba(74,222,128,.13);
+      --good-line:rgba(74,222,128,.35);
+      --bad:#F87171;
+      --bad-weak:rgba(248,113,113,.12);
+      --bad-line:rgba(248,113,113,.35);
+      --shadow:0 1px 2px rgba(0,0,0,.3);
+      --shadow-hover:0 12px 28px rgba(0,0,0,.45),0 6px 12px rgba(0,0,0,.3);
+      --surface-2:#273449;
+      --chip:#273449;
+      --glass:rgba(30,41,59,.85);
+      --tip-text:#CBD5E1;
+      --num:rgba(96,165,250,.08);
+    }
+  }
+  /* 手动切换（覆盖系统） */
+  :root[data-theme="dark"]{
+    --bg:#0F172A;
+    --card:#1E293B;
+    --border:#334155;
+    --text:#E2E8F0;
+    --muted:#94A3B8;
+    --accent:#60A5FA;
+    --accent-weak:rgba(96,165,250,.12);
+    --accent-line:rgba(96,165,250,.3);
+    --good:#4ADE80;
+    --good-weak:rgba(74,222,128,.13);
+    --good-line:rgba(74,222,128,.35);
+    --bad:#F87171;
+    --bad-weak:rgba(248,113,113,.12);
+    --bad-line:rgba(248,113,113,.35);
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+    --shadow-hover:0 12px 28px rgba(0,0,0,.45),0 6px 12px rgba(0,0,0,.3);
+    --surface-2:#273449;
+    --chip:#273449;
+    --glass:rgba(30,41,59,.85);
+    --tip-text:#CBD5E1;
+    --num:rgba(96,165,250,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;
+    -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+    -webkit-touch-callout:none;}
+  a{pointer-events:auto}
+  img{-webkit-user-drag:none}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    line-height:1.7;
+    font-size:15.5px;
+    -webkit-font-smoothing:antialiased;
+    transition:background .25s ease,color .25s ease;
+  }
+  .theme-toggle{
+    position:fixed;top:16px;right:16px;z-index:10;
+    width:40px;height:40px;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+    color:var(--text);background:var(--glass);
+    border:1px solid var(--border);
+    backdrop-filter:blur(6px);box-shadow:var(--shadow);
+    transition:transform .18s ease,border-color .18s ease;
+  }
+  .theme-toggle:hover{transform:scale(1.08);border-color:var(--accent-line)}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 20px 80px}
+  .updating{
+    position:fixed;top:16px;left:16px;z-index:10;
+    font-size:13px;font-weight:600;
+    color:var(--accent);
+    background:var(--glass);
+    border:1px solid var(--accent-line);
+    border-radius:20px;padding:6px 14px;
+    backdrop-filter:blur(6px);
+    box-shadow:var(--shadow);
+  }
+  header{text-align:center;margin-bottom:40px}
+  .logo{
+    display:inline-flex;align-items:center;gap:12px;
+    font-size:32px;font-weight:800;letter-spacing:.5px;
+    color:var(--accent);
+  }
+  .logo .dot{
+    width:12px;height:12px;border-radius:50%;
+    background:var(--accent);
+  }
+  .subtitle{color:var(--muted);margin-top:12px;font-size:15px}
+  .tip{
+    margin:22px auto 0;max-width:640px;
+    background:var(--accent-weak);
+    border:1px solid var(--accent-line);
+    border-radius:12px;padding:12px 18px;
+    color:var(--tip-text);font-size:14px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:18px;
+  }
+  .card{
+    position:relative;display:flex;flex-direction:column;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    text-decoration:none;color:inherit;
+    box-shadow:var(--shadow);
+    transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg,var(--accent-weak),transparent 45%);
+    opacity:0;transition:opacity .18s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:var(--accent-line);
+    box-shadow:var(--shadow-hover);
+  }
+  .card:hover::before{opacity:1}
+  .card-top{display:flex;align-items:flex-start;gap:14px;position:relative;z-index:1}
+  .num{
+    position:absolute;top:-6px;right:-2px;z-index:0;
+    font-size:56px;font-weight:800;line-height:1;
+    color:var(--num);
+  }
+  .avatar{
+    width:46px;height:46px;border-radius:12px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:800;color:#fff;
+    background:var(--accent);
+  }
+  .name{font-size:18px;font-weight:700;display:flex;align-items:center;gap:6px}
+  .name .ext{color:var(--accent);font-size:14px}
+  .host{font-size:12.5px;color:var(--muted);word-break:break-all}
+  .tag{
+    display:inline-block;font-size:12px;padding:3px 12px;border-radius:20px;
+    margin-bottom:2px;position:relative;z-index:1;font-weight:600;
+  }
+  .tag.rec{color:var(--good);background:var(--good-weak);border:1px solid var(--good-line)}
+  .tag.no{color:var(--bad);background:var(--bad-weak);border:1px solid var(--bad-line)}
+  .tag.unknown{color:var(--muted);background:var(--surface-2);border:1px solid var(--border)}
+  .desc{margin-top:14px;font-size:15px;font-weight:600;position:relative;z-index:1}
+  .note{
+    margin-top:14px;padding-top:14px;font-size:13px;color:var(--muted);
+    border-top:1px dashed var(--border);position:relative;z-index:1;
+  }
+  .note.empty{min-height:1.6em}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;position:relative;z-index:1}
+  .badge{
+    font-size:12px;padding:4px 10px;border-radius:20px;font-weight:600;
+    border:1px solid var(--border);color:var(--muted);background:var(--chip);
+  }
+  .badge.checkin{
+    color:var(--good);border-color:var(--good-line);background:var(--good-weak);
+  }
+  .badge.aff{color:var(--accent);border-color:var(--accent-line);background:var(--accent-weak)}
+  .go{
+    margin-top:18px;display:flex;align-items:center;justify-content:space-between;
+    font-size:14px;font-weight:600;color:var(--accent);position:relative;z-index:1;
+  }
+  .go .arrow{transition:transform .18s ease}
+  .card:hover .go .arrow{transform:translateX(4px)}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:56px}
+  footer a{color:var(--accent);text-decoration:none}
+  @media(max-width:520px){
+    .logo{font-size:26px}
+    .wrap{padding:32px 16px 60px}
+  }
+</style>
+</head>
+<body>
+<div class="updating">🔄 持续更新中……</div>
+<button class="theme-toggle" id="themeToggle" title="切换日间 / 夜间模式" aria-label="切换主题">🌙</button>
+<div class="wrap">
+  <header>
+    <div class="logo"><span class="dot"></span>公益站导航</div>
+    <p class="subtitle">精选 AI API 中转 / 福利站点 · 注册即领额度，每日签到白嫖</p>
+    <div class="tip">💡 点击卡片前往对应站点注册，标有「每日签到」的站点记得每天登录领取免费额度。</div>
+  </header>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    共 <span id="count">0</span> 个站点<br>
+    仅供学习交流 · 请遵守各站点服务条款
+  </footer>
+</div>
+
+<script>
+  // ===== 日间 / 夜间模式切换（默认跟随系统，可手动切换并记忆）=====
+  (function(){
+    const root = document.documentElement;
+    const btn = document.getElementById("themeToggle");
+    const systemDark = () => window.matchMedia("(prefers-color-scheme:dark)").matches;
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch(e){}
+    function isDark(){
+      const t = root.getAttribute("data-theme");
+      return t ? t === "dark" : systemDark();
+    }
+    function sync(){ btn.textContent = isDark() ? "☀️" : "🌙"; }
+    if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+    sync();
+    btn.addEventListener("click", () => {
+      const next = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch(e){}
+      sync();
+    });
+    // 未手动选择时，跟随系统变化
+    window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change", () => {
+      if (!root.getAttribute("data-theme")) sync();
+    });
+  })();
+
+  // ===== 防护：只允许点击链接 =====
+  // 禁用右键菜单
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  // 禁止复制/剪切/拖拽
+  ['copy','cut','dragstart','selectstart'].forEach(ev =>
+    document.addEventListener(ev, e => e.preventDefault()));
+  // 禁用常用快捷键：F12 / Ctrl+U(源码) / Ctrl+S(保存) / Ctrl+P(打印)
+  // 以及 Ctrl+Shift+I/J/C (开发者工具)
+  document.addEventListener('keydown', e => {
+    const k = (e.key || '').toUpperCase();
+    if (k === 'F12') { e.preventDefault(); return; }
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey &&
+        ['U','S','C','X','P','A'].includes(k)) e.preventDefault();
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['I','J','C'].includes(k)) e.preventDefault();
+  });
+
+  // 站点数据：desc=注册福利，checkin=能否每日签到(true/false/null未知)，
+  // recharge=是否有充值入口(true/false/null未知)，extra=补充说明
+  const sites = [
+    { url:"https://agentrouter.org/register?aff=YKO7", name:"Agent Router", tag:"", desc:"注册送 175 额度", checkin:true, recharge:null, extra:"请求地址看公告，大陆用户请求地址不同" },
+    { url:"https://gorouter.app/sign-up?aff=RG7H", name:"Go Router", tag:"", desc:"注册送 70 额度", checkin:true, recharge:null, extra:"限时注册，能否成功随缘" },
+    { url:"https://tabitoken.com/sign-up?aff=TRoo", name:"TaBiAi", tag:"", desc:"注册送 120 额度", checkin:true, recharge:null, extra:"新站速冲，不定时开放注册" },
+    { url:"https://modeloc.com/i/94K3G3T2", name:"MODELOC", tag:"", desc:"注册送 10 额度", checkin:false, recharge:true, extra:"非纯公益站，倍率看算力价格，最高 0.1 倍" },
+    { url:"https://api.fuka.win/sign-up?aff=9bC6", name:"芙卡卡の小食堂", tag:"", desc:"注册送 150 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://new.sharedchat.cc/list/#/register?i=5oBuM", name:"sharedchat", tag:"", desc:"每天送 100 额度", checkin:false, recharge:null, extra:"额度爽，但不支持并发" },
+    { url:"https://api.justwoker.icu/sign-up?aff=evGv", name:"JustDoWork", tag:"", desc:"注册送 70 额度，每日登录送随机额度", checkin:true, recharge:null, extra:"支持 opus5" },
+    { url:"https://api456.me/register?aff=eWiM", name:"API456", tag:"", desc:"注册送 35 额度", checkin:true, recharge:true, extra:"" },
+    { url:"https://docode.cc/register?aff=8PRl", name:"DoCode", tag:"", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"" },
+    { url:"https://api520.pro/register?aff=PBe1", name:"API520", tag:"", desc:"注册送 200 额度", checkin:false, recharge:null, extra:"" },
+    { url:"https://ai.luogu.me/sign-up?aff=hxEg", name:"Luogu AI", tag:"暂不推荐", desc:"注册无额度", checkin:false, recharge:true, extra:"只能充值，不推荐" },
+    { url:"https://api.uglycat.cc/register?aff=dKs2", name:"UglyCat", tag:"", desc:"注册送 13 额度", checkin:true, recharge:null, extra:"" },
+    { url:"https://api.bluesminds.com/sign-up?aff=0zXF", name:"BlueSminds", tag:"", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"" },
+    { url:"https://beizhi.sylu.cc/sign-up?aff=OFCw", name:"Beizhi", tag:"", desc:"注册送 50 额度", checkin:true, recharge:true, extra:"" },
+    { url:"https://helpcoder.cc/register?aff=qiqk", name:"HelpCoder", tag:"", desc:"注册送 200 额度", checkin:true, recharge:true, extra:"" },
+    { url:"https://new.xinjianya.top/register?aff=tYzA", name:"新剑丫", tag:"", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"" },
+    { url:"https://api.hcnsec.cn/sign-up?aff=O5dw", name:"幻城网安", tag:"", desc:"注册送 30000 额度", checkin:true, recharge:true, extra:"" },
+  ];
+
+  const tagClass = { "推荐":"rec", "暂不推荐":"no", "情况未明":"unknown" };
+
+  const grid = document.getElementById("grid");
+  sites.forEach((s,i)=>{
+    const host = new URL(s.url).hostname;
+    const initial = s.name.replace(/[^A-Za-z0-9]/g,"").charAt(0).toUpperCase() || "公";
+    const num = String(i+1).padStart(2,"0");
+    const a = document.createElement("a");
+    a.className = "card";
+    a.href = s.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    const badges = [];
+    if (s.checkin === true)  badges.push(`<span class="badge checkin">✅ 可签到</span>`);
+    if (s.checkin === false) badges.push(`<span class="badge">🚫 不可签到</span>`);
+    if (s.recharge === true) badges.push(`<span class="badge aff">💰 有充值入口</span>`);
+    a.innerHTML = `
+      <span class="num">${num}</span>
+      ${s.tag
+        ? `<span class="tag ${tagClass[s.tag]||'unknown'}">● ${s.tag}</span>`
+        : `<span class="tag unknown">●</span>`}
+      <div class="card-top">
+        <div class="avatar">${initial}</div>
+        <div>
+          <div class="name">${s.name} <span class="ext">↗</span></div>
+          <div class="host">${host}</div>
+        </div>
+      </div>
+      <div class="desc">${s.desc}</div>
+      ${badges.length ? `<div class="badges">${badges.join("")}</div>` : ""}
+      <div class="note${s.extra ? "" : " empty"}">${s.extra || ""}</div>
+    `;
+    grid.appendChild(a);
+  });
+  document.getElementById("count").textContent = sites.length;
+</script>
+</body>
+</html>
