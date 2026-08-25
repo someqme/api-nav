@@ -1,0 +1,10 @@
+# 本地链接备注文件（不上传，仅本地保留）
+.txt
+
+# OS / 编辑器产生的杂项文件
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+.vscode/
+.idea/
