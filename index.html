@@ -196,6 +196,8 @@
     color:var(--good);border-color:var(--good-line);background:var(--good-weak);
   }
   .badge.aff{color:var(--accent);border-color:var(--accent-line);background:var(--accent-weak)}
+  /* 无签到 / 充值徽章时的隐形占位，保证所有卡片高度一致 */
+  .badge.ghost{visibility:hidden}
   .go{
     margin-top:18px;display:flex;align-items:center;justify-content:space-between;
     font-size:14px;font-weight:600;color:var(--accent);position:relative;z-index:1;
@@ -292,6 +294,8 @@
     { url:"https://helpcoder.cc/register?aff=qiqk", name:"帮帮程序员", tag:"", desc:"注册送 200 额度", checkin:true, recharge:false, extra:"模型只有 gpt" },
     { url:"https://new.xinjianya.top/register?aff=tYzA", name:"星见雅 API", tag:"", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
     { url:"https://api.hcnsec.cn/sign-up?aff=O5dw", name:"幻城网安", tag:"", desc:"注册送 30000 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://free.lyclaude.site/register?aff=jWZF", name:"Free", tag:"", desc:"每天签到送 200 额度", checkin:true, recharge:false, extra:"" },
+    { url:"https://seekai.cc/sign-up?aff=JTN5", name:"SeekAi", tag:"", desc:"注册送 200 额度，每天签到送 20 额度", checkin:true, recharge:false, extra:"" },
   ];
 
   const tagClass = { "推荐":"rec", "暂不推荐":"no", "情况未明":"unknown" };
@@ -309,6 +313,8 @@
     const badges = [];
     if (s.checkin === true)  badges.push(`<span class="badge checkin">✅ 可签到</span>`);
     if (s.recharge === true) badges.push(`<span class="badge aff">💰 有充值入口</span>`);
+    // 两者都没有时放一个隐形徽章占位，让所有卡片格式统一
+    if (!badges.length)      badges.push(`<span class="badge ghost" aria-hidden="true">占位</span>`);
     a.innerHTML = `
       <span class="num">${num}</span>
       ${s.tag
@@ -322,7 +328,7 @@
         </div>
       </div>
       <div class="desc">${s.desc}</div>
-      ${badges.length ? `<div class="badges">${badges.join("")}</div>` : ""}
+      <div class="badges">${badges.join("")}</div>
       <div class="note${s.extra ? "" : " empty"}">${s.extra || ""}</div>
     `;
     grid.appendChild(a);
