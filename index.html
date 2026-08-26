@@ -280,18 +280,18 @@
     { url:"https://tabitoken.com/sign-up?aff=TRoo", name:"TaBiAi", tag:"", desc:"注册送 120 额度", checkin:true, recharge:null, extra:"新站速冲，不定时开放注册" },
     { url:"https://modeloc.com/i/94K3G3T2", name:"MODELOC", tag:"", desc:"注册送 10 额度", checkin:false, recharge:true, extra:"非纯公益站，倍率看算力价格，最高 0.1 倍" },
     { url:"https://api.fuka.win/sign-up?aff=9bC6", name:"芙卡卡の小食堂", tag:"", desc:"注册送 150 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
-    { url:"https://new.sharedchat.cc/list/#/register?i=5oBuM", name:"sharedchat", tag:"", desc:"每天送 100 额度", checkin:false, recharge:null, extra:"额度爽，但不支持并发" },
+    { url:"https://new.sharedchat.cc/list/#/register?i=5oBuM", name:"ChatAI", tag:"", desc:"每天送 100 额度", checkin:false, recharge:null, extra:"额度爽，但不支持并发" },
     { url:"https://api.justwoker.icu/sign-up?aff=evGv", name:"JustDoWork", tag:"", desc:"注册送 70 额度，每日登录送随机额度", checkin:true, recharge:null, extra:"支持 opus5" },
-    { url:"https://api456.me/register?aff=eWiM", name:"API456", tag:"", desc:"注册送 35 额度", checkin:true, recharge:true, extra:"" },
-    { url:"https://docode.cc/register?aff=8PRl", name:"DoCode", tag:"", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"" },
-    { url:"https://api520.pro/register?aff=PBe1", name:"API520", tag:"", desc:"注册送 200 额度", checkin:false, recharge:null, extra:"" },
-    { url:"https://ai.luogu.me/sign-up?aff=hxEg", name:"Luogu AI", tag:"暂不推荐", desc:"注册无额度", checkin:false, recharge:true, extra:"只能充值，不推荐" },
-    { url:"https://api.uglycat.cc/register?aff=dKs2", name:"UglyCat", tag:"", desc:"注册送 13 额度", checkin:true, recharge:null, extra:"" },
-    { url:"https://api.bluesminds.com/sign-up?aff=0zXF", name:"BlueSminds", tag:"", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"" },
-    { url:"https://beizhi.sylu.cc/sign-up?aff=OFCw", name:"Beizhi", tag:"", desc:"注册送 50 额度", checkin:true, recharge:true, extra:"" },
-    { url:"https://helpcoder.cc/register?aff=qiqk", name:"HelpCoder", tag:"", desc:"注册送 200 额度", checkin:true, recharge:true, extra:"" },
-    { url:"https://new.xinjianya.top/register?aff=tYzA", name:"新剑丫", tag:"", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"" },
-    { url:"https://api.hcnsec.cn/sign-up?aff=O5dw", name:"幻城网安", tag:"", desc:"注册送 30000 额度", checkin:true, recharge:true, extra:"" },
+    { url:"https://api456.me/register?aff=eWiM", name:"可萌中转站", tag:"", desc:"注册送 35 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://docode.cc/register?aff=8PRl", name:"DoCode", tag:"", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://api520.pro/register?aff=PBe1", name:"熊猫 API", tag:"", desc:"注册送 200 额度", checkin:false, recharge:false, extra:"" },
+    { url:"https://ai.luogu.me/sign-up?aff=hxEg", name:"LGSAI", tag:"暂不推荐", desc:"注册无额度", checkin:false, recharge:true, extra:"只能充值，不推荐" },
+    { url:"https://api.uglycat.cc/register?aff=dKs2", name:"UglyCat", tag:"暂不推荐", desc:"注册送 13 额度", checkin:true, recharge:false, extra:"已停止维护，有广告，谨慎入" },
+    { url:"https://api.bluesminds.com/sign-up?aff=0zXF", name:"BlueSminds", tag:"", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://beizhi.sylu.cc/sign-up?aff=OFCw", name:"Liminality", tag:"", desc:"注册送 50 额度", checkin:true, recharge:true, extra:"统一 OpenAI 格式接口，非纯公益站，谨慎入" },
+    { url:"https://helpcoder.cc/register?aff=qiqk", name:"帮帮程序员", tag:"", desc:"注册送 200 额度", checkin:true, recharge:false, extra:"模型只有 gpt" },
+    { url:"https://new.xinjianya.top/register?aff=tYzA", name:"星见雅 API", tag:"", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://api.hcnsec.cn/sign-up?aff=O5dw", name:"幻城网安", tag:"", desc:"注册送 30000 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
   ];
 
   const tagClass = { "推荐":"rec", "暂不推荐":"no", "情况未明":"unknown" };
@@ -308,7 +308,6 @@
     a.rel = "noopener noreferrer";
     const badges = [];
     if (s.checkin === true)  badges.push(`<span class="badge checkin">✅ 可签到</span>`);
-    if (s.checkin === false) badges.push(`<span class="badge">🚫 不可签到</span>`);
     if (s.recharge === true) badges.push(`<span class="badge aff">💰 有充值入口</span>`);
     a.innerHTML = `
       <span class="num">${num}</span>
