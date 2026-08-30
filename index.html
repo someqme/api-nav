@@ -276,33 +276,41 @@
 
   // 站点数据：desc=注册福利，checkin=能否每日签到(true/false/null未知)，
   // recharge=是否有充值入口(true/false/null未知)，extra=补充说明
+  // 排序规则：可签到优先 → 纯公益（无充值）优先 → 组内保持原有先后，暂不推荐垫底
+  // 新增站点请放进对应分组，不要一律加在末尾（.num 由下标决定）
   const sites = [
+    // ⓪ 置顶：手动固定在第一位，不参与下面的排序
+    { url:"https://chatanywhere.tech/", name:"ChatAnywhere", tag:"", desc:"不用注册，GitHub 账号授权，领取一份长期有效的免费 Key", checkin:null, recharge:null, extra:"" },
+    // ① 可签到 + 纯公益，白嫖首选
     { url:"https://agentrouter.org/register?aff=YKO7", name:"Agent Router", tag:"", desc:"注册送 175 额度", checkin:true, recharge:null, extra:"请求地址看公告，大陆用户请求地址不同" },
     { url:"https://gorouter.app/sign-up?aff=RG7H", name:"Go Router", tag:"", desc:"注册送 70 额度", checkin:true, recharge:null, extra:"限时注册，能否成功随缘" },
     { url:"https://tabitoken.com/sign-up?aff=TRoo", name:"TaBiAi", tag:"", desc:"注册送 120 额度", checkin:true, recharge:null, extra:"新站速冲，不定时开放注册" },
-    { url:"https://modeloc.com/i/94K3G3T2", name:"MODELOC", tag:"", desc:"注册送 10 额度", checkin:false, recharge:true, extra:"非纯公益站，倍率看算力价格，最高 0.1 倍" },
-    { url:"https://api.fuka.win/sign-up?aff=9bC6", name:"芙卡卡の小食堂", tag:"", desc:"注册送 150 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
-    { url:"https://new.sharedchat.cc/list/#/register?i=5oBuM", name:"ChatAI", tag:"", desc:"每天送 100 额度", checkin:false, recharge:null, extra:"额度爽，但不支持并发" },
     { url:"https://api.justwoker.icu/sign-up?aff=evGv", name:"JustDoWork", tag:"", desc:"注册送 70 额度，每日登录送随机额度", checkin:true, recharge:null, extra:"支持 opus5" },
-    { url:"https://api456.me/register?aff=eWiM", name:"可萌中转站", tag:"", desc:"注册送 35 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
-    { url:"https://docode.cc/register?aff=8PRl", name:"DoCode", tag:"", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
-    { url:"https://api520.pro/register?aff=PBe1", name:"熊猫 API", tag:"", desc:"注册送 200 额度", checkin:false, recharge:false, extra:"" },
-    { url:"https://ai.luogu.me/sign-up?aff=hxEg", name:"LGSAI", tag:"暂不推荐", desc:"注册无额度", checkin:false, recharge:true, extra:"只能充值，不推荐" },
-    { url:"https://api.uglycat.cc/register?aff=dKs2", name:"UglyCat", tag:"暂不推荐", desc:"注册送 13 额度", checkin:true, recharge:false, extra:"已停止维护，有广告，谨慎入" },
-    { url:"https://api.bluesminds.com/sign-up?aff=0zXF", name:"BlueSminds", tag:"", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
-    { url:"https://beizhi.sylu.cc/sign-up?aff=OFCw", name:"Liminality", tag:"", desc:"注册送 50 额度", checkin:true, recharge:true, extra:"统一 OpenAI 格式接口，非纯公益站，谨慎入" },
     { url:"https://helpcoder.cc/register?aff=qiqk", name:"帮帮程序员", tag:"", desc:"注册送 200 额度", checkin:true, recharge:false, extra:"模型只有 gpt" },
-    { url:"https://new.xinjianya.top/register?aff=tYzA", name:"星见雅 API", tag:"", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
-    { url:"https://api.hcnsec.cn/sign-up?aff=O5dw", name:"幻城网安", tag:"", desc:"注册送 30000 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
     { url:"https://free.lyclaude.site/register?aff=jWZF", name:"Free", tag:"", desc:"每天签到送 200 额度", checkin:true, recharge:false, extra:"" },
     { url:"https://seekai.cc/sign-up?aff=JTN5", name:"SeekAi", tag:"", desc:"注册送 200 额度，每天签到送 20 额度", checkin:true, recharge:false, extra:"" },
+    { url:"https://kktoken.cc/sign-up?aff=SuL1", name:"KKToken", tag:"", desc:"注册额度 100", checkin:true, recharge:false, extra:"" },
+    // ② 可签到，但同时开了充值入口
+    { url:"https://api456.me/register?aff=eWiM", name:"可萌中转站", tag:"", desc:"注册送 35 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://beizhi.sylu.cc/sign-up?aff=OFCw", name:"Liminality", tag:"", desc:"注册送 50 额度", checkin:true, recharge:true, extra:"统一 OpenAI 格式接口，非纯公益站，谨慎入" },
+    { url:"https://new.xinjianya.top/register?aff=tYzA", name:"星见雅 API", tag:"", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://api.hcnsec.cn/sign-up?aff=O5dw", name:"幻城网安", tag:"", desc:"注册送 30000 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
     { url:"https://kapibala.asia/sign-up?aff=sIHY", name:"卡皮巴拉", tag:"", desc:"注册送 20 额度，签到送随机额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
+    // ③ 不能签到，但白送额度 / 免费 Key
+    { url:"https://new.sharedchat.cc/list/#/register?i=5oBuM", name:"ChatAI", tag:"", desc:"每天送 100 额度", checkin:false, recharge:null, extra:"额度爽，但不支持并发" },
+    { url:"https://api520.pro/register?aff=PBe1", name:"熊猫 API", tag:"", desc:"注册送 200 额度", checkin:false, recharge:false, extra:"" },
+    // ④ 不能签到的非纯公益站
+    { url:"https://modeloc.com/i/94K3G3T2", name:"MODELOC", tag:"", desc:"注册送 10 额度", checkin:false, recharge:true, extra:"非纯公益站，倍率看算力价格，最高 0.1 倍" },
+    { url:"https://api.fuka.win/sign-up?aff=9bC6", name:"芙卡卡の小食堂", tag:"", desc:"注册送 150 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://docode.cc/register?aff=8PRl", name:"DoCode", tag:"", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://api.bluesminds.com/sign-up?aff=0zXF", name:"BlueSminds", tag:"", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
     { url:"https://756777.xyz/register?aff=QJL6P8FRXUUF", name:"启悟流", tag:"", desc:"注册送 20 额度 7 天体验", checkin:false, recharge:true, extra:"需加群联系群主，非纯公益站，谨慎入" },
     { url:"https://cli.999554.xyz/register?aff=JDxB", name:"云舟", tag:"", desc:"免费 DeepSeek V4 flash", checkin:false, recharge:true, extra:"个人站不稳定" },
     { url:"https://api.aisz.mom/sign-up?aff=VPMK", name:"词元枢阁", tag:"", desc:"注册额度 0.16", checkin:false, recharge:true, extra:"有免费分组只限聊天" },
+    // ⑤ 暂不推荐
+    { url:"https://api.uglycat.cc/register?aff=dKs2", name:"UglyCat", tag:"暂不推荐", desc:"注册送 13 额度", checkin:true, recharge:false, extra:"已停止维护，有广告，谨慎入" },
     { url:"https://dawclaudecode.com/sign-up?aff=0069", name:"DawCode", tag:"暂不推荐", desc:"注册额度 0.9", checkin:true, recharge:true, extra:"签到额度很小，不推荐" },
-    { url:"https://chatanywhere.tech/", name:"ChatAnywhere", tag:"", desc:"不用注册，GitHub 账号授权，领取一份长期有效的免费 Key", checkin:null, recharge:null, extra:"" },
-    { url:"https://kktoken.cc/sign-up?aff=SuL1", name:"KKToken", tag:"", desc:"注册额度 100", checkin:true, recharge:false, extra:"" },
+    { url:"https://ai.luogu.me/sign-up?aff=hxEg", name:"LGSAI", tag:"暂不推荐", desc:"注册无额度", checkin:false, recharge:true, extra:"只能充值，不推荐" },
   ];
 
   const tagClass = { "推荐":"rec", "暂不推荐":"no", "情况未明":"unknown" };
