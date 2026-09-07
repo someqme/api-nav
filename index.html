@@ -320,16 +320,12 @@
   // 排序规则：好用 → 可用 → 慢（含暂不可用/不推荐）→ 已失效；组内保持 .txt 的相对顺序
   // 新增或更新站点时，以 .txt 的状态、字段和顺序为准（.num 由下标决定）
   const sites = [
-    // 好用
+    // ① 好用
     { url:"https://agentrouter.org/register?aff=YKO7", name:"Agent Router", tag:"好用", desc:"注册送 175 额度", checkin:true, recharge:null, extra:"请求地址看公告，大陆用户请求地址不同" },
-    { url:"https://api.justwoker.icu/sign-up?aff=evGv", name:"JustDoWork", tag:"好用", desc:"注册送 70 额度，每日登录送随机额度", checkin:true, recharge:null, extra:"支持 opus5" },
-    { url:"https://kktoken.cc/sign-up?aff=SuL1", name:"KKToken", tag:"好用", desc:"注册额度 100", checkin:true, recharge:false, extra:"需要代理" },
-    { url:"https://api.cheapcodex.online/register?aff=YRF2BVA6RPJ4", name:"Cheap", tag:"好用", desc:"注册额度 20，签到额度 20", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
+    { url:"https://openrouter.ai", name:"Open Router", tag:"好用", desc:"手动在模型界面选择 free 复制到配置里", checkin:null, recharge:null, extra:"" },
 
-    // 可用
+    // ② 可用
     { url:"https://chatanywhere.tech/", name:"ChatAnywhere", tag:"可用", desc:"不用注册，GitHub 账号授权，领取一份长期有效的免费 Key", checkin:null, recharge:null, extra:"额度小" },
-    { url:"https://gorouter.app/sign-up?aff=RG7H", name:"Go Router", tag:"可用", desc:"注册送 70 额度", checkin:true, recharge:null, extra:"限时注册，能否成功随缘，需要代理" },
-    { url:"https://tabitoken.com/sign-up?aff=TRoo", name:"TaBiAi", tag:"可用", desc:"注册送 120 额度", checkin:true, recharge:null, extra:"新站速冲，不定时开放注册" },
     { url:"https://api456.me/register?aff=eWiM", name:"可萌中转站", tag:"可用", desc:"注册送 35 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
     { url:"https://beizhi.sylu.cc/sign-up?aff=OFCw", name:"Liminality", tag:"可用", desc:"注册送 50 额度", checkin:true, recharge:true, extra:"统一 OpenAI 格式接口，非纯公益站，谨慎入" },
     { url:"https://api.hcnsec.cn/sign-up?aff=O5dw", name:"幻城网安", tag:"可用", desc:"注册送 30000 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
@@ -342,14 +338,20 @@
     { url:"https://api.bluesminds.com/sign-up?aff=0zXF", name:"BlueSminds", tag:"可用", desc:"注册送 100 额度", checkin:false, recharge:true, extra:"非纯公益站，谨慎入" },
     { url:"https://api.aisz.mom/sign-up?aff=VPMK", name:"词元枢阁", tag:"可用", desc:"注册额度 0.16", checkin:false, recharge:true, extra:"有免费分组只限聊天" },
     { url:"https://dawclaudecode.com/sign-up?aff=0069", name:"DawCode", tag:"可用", desc:"注册额度 0.9", checkin:true, recharge:true, extra:"免费额度很小" },
+    { url:"https://www.sharellm.net/sign-up?aff=lQiW", name:"Share", tag:"可用", desc:"免费模型池", checkin:null, recharge:null, extra:"" },
 
-    // 慢 / 暂不可用 / 不推荐
+    // ③ 慢 / 暂不可用 / 不推荐
+    { url:"https://gorouter.app/sign-up?aff=RG7H", name:"Go Router", tag:"暂不可用", desc:"注册送 70 额度", checkin:true, recharge:null, extra:"限时注册，能否成功随缘，需要代理" },
+    { url:"https://tabitoken.com/sign-up?aff=TRoo", name:"TaBiAi", tag:"暂不可用", desc:"注册送 120 额度", checkin:true, recharge:null, extra:"新站速冲，不定时开放注册" },
+    { url:"https://api.justwoker.icu/sign-up?aff=evGv", name:"JustDoWork", tag:"暂不可用", desc:"注册送 70 额度，每日登录送随机额度", checkin:true, recharge:null, extra:"支持 opus5" },
     { url:"https://seekai.cc/sign-up?aff=JTN5", name:"SeekAi", tag:"暂不可用", desc:"注册送 200 额度，每天签到送 20 额度", checkin:true, recharge:false, extra:"需要代理" },
-    { url:"https://vyceai.com/signup?ref=VYCE_25TQWF", name:"VyceAI", tag:"慢", desc:"注册额度 50，签到额度 10", checkin:true, recharge:true, extra:"没请求成功" },
+    { url:"https://kktoken.cc/sign-up?aff=SuL1", name:"KKToken", tag:"暂不可用", desc:"注册额度 100", checkin:true, recharge:false, extra:"需要代理" },
+    { url:"https://vyceai.com/signup?ref=VYCE_25TQWF", name:"VyceAI", tag:"非常慢", desc:"注册额度 50，签到额度 10", checkin:true, recharge:true, extra:"没请求成功" },
     { url:"https://756777.xyz/register?aff=QJL6P8FRXUUF", name:"启悟流", tag:"慢", desc:"注册送 20 额度 7 天体验", checkin:false, recharge:true, extra:"需加群联系群主，非纯公益站，谨慎入" },
     { url:"https://cli.999554.xyz/register?aff=JDxB", name:"云舟", tag:"不推荐", desc:"免费 DeepSeek V4 flash", checkin:false, recharge:true, extra:"必须充值才能使用免费模型" },
+    { url:"https://api.cheapcodex.online/register?aff=YRF2BVA6RPJ4", name:"Cheap", tag:"暂不可用", desc:"注册额度 20，签到额度 20", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
 
-    // 已失效
+    // ④ 已失效
     { url:"https://helpcoder.cc/register?aff=qiqk", name:"帮帮程序员", tag:"已失效", desc:"注册送 200 额度", checkin:true, recharge:false, extra:"模型只有 gpt" },
     { url:"https://free.lyclaude.site/register?aff=jWZF", name:"Free", tag:"已失效", desc:"每天签到送 200 额度", checkin:true, recharge:false, extra:"" },
     { url:"https://new.xinjianya.top/register?aff=tYzA", name:"星见雅 API", tag:"已失效", desc:"注册送 100 额度", checkin:true, recharge:true, extra:"非纯公益站，谨慎入" },
@@ -359,7 +361,7 @@
   // 状态 → 样式：好用绿 / 可用白 / 慢·暂不可用·不推荐橙 / 已失效深灰
   const tagClass = {
     "好用":"good", "可用":"available",
-    "慢":"slow", "暂不可用":"slow", "不推荐":"slow",
+    "慢":"slow", "非常慢":"slow", "暂不可用":"slow", "不推荐":"slow",
     "已失效":"dead",
   };
 
